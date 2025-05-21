@@ -1,5 +1,7 @@
+import { buildInsertQuery } from "../lib/data-to-sql.js"
 import { queryDB } from "../lib/database.js"
 import validateContent from "../validation/global.js"
+import * as uuid from "uuid"
 
 const statusJanji = {
   menunggu: "Menunggu",
@@ -20,7 +22,10 @@ JOIN tamu t ON jt.id_tamu = t.id_tamu
 JOIN pengguna p ON jt.id_guru = p.id_pengguna
 LIMIT 50 OFFSET ?`, [showNextPage])
   if(getListJanji.error) {
-    return getListJanji.error
+    return {
+      error: "internalerror",
+      message: "Internal Server Error"
+    }
   }
   // Return listnya
   return {
@@ -65,7 +70,10 @@ JOIN pengguna p ON jt.id_guru = p.id_pengguna
 WHERE jt.id_guru = ?
 LIMIT 50 OFFSET ?`, [parseInt(id), showNextPage])
   if(getListJanji.error) {
-    return getListJanji.error
+    return {
+      error: "internalerror",
+      message: "Internal Server Error"
+    }
   }
   // Return listnya
   return {
@@ -90,12 +98,107 @@ LIMIT 50 OFFSET ?`, [parseInt(id), showNextPage])
   }
 }
 
-async function janjitemu_buatperjanjian(authUser, { } = {}) {
-  
+async function janjitemu_buatperjanjian({ id_tamu, id_guru, tanggal, waktu, keperluan = "" } = {}) {
+  // Check validation
+  const validateForm = validateContent("schema_addjanjitemu", { id_tamu, id_guru, tanggal, waktu, keperluan })
+  if(!!validateForm) {
+    return validateForm
+  }
+  // Pengecekan ID Guru tersedia atau tidak
+  const getGuruID = await queryDB('SELECT id_pengguna, nama FROM pengguna WHERE id_pengguna = ? AND role = \'guru\'', [parseInt(id_guru)])
+  if(getGuruID.error) {
+    return {
+      error: "internalerror",
+      message: "Internal Server Error"
+    }
+  }
+  // Data Guru
+  const dataGuru = getGuruID.data[0]
+  if(!dataGuru) {
+    return {
+      error: "select_notfound",
+      message: "ID Guru tersebut tidak ditemukan"
+    }
+  }
+  // Pengecekan ID Tamu tersedia atau tidak
+  const getTamuID = await queryDB('SELECT nama FROM tamu WHERE id_tamu = ?', [parseInt(id_tamu)])
+  if(getTamuID.error) {
+    return {
+      error: "internalerror",
+      message: "Internal Server Error"
+    }
+  }
+  // Data Tamu
+  const dataTamu = getTamuID.data[0]
+  if(!dataTamu) {
+    return {
+      error: "select_notfound",
+      message: "ID Tamu tersebut tidak ditemukan"
+    }
+  }
+  // Pengolahan data
+  const dataInput = {
+    id_tamu: parseInt(id_tamu),
+    id_guru: parseInt(id_guru),
+    tanggal: tanggal,
+    waktu: waktu,
+    keperluan: String(keperluan).trim(),
+    status: "menunggu",
+    kode_qr: uuid.v4()
+  }
+  // Build Data Input Ke Data Query
+  const buildData = buildInsertQuery(dataInput, { table: "janji_temu" })
+  console.log(buildData)
+  const applyInsert = await queryDB(buildData.query, buildData.value)
+  if(applyInsert.error) {
+    return {
+      error: "internalerror",
+      message: "Internal Server Error"
+    }
+  }
+  // Kembalikan dengan data success (Dengan Memberikan Kode QR)
+  return {
+    data: {
+      success: true,
+      qr_code: dataInput.kode_qr
+    }
+  }
 }
 
-async function janjitemu_statusjanjian({ id, changeStatus } = {}) {
-  
+async function janjitemu_statusjanjian({ id, status } = {}) {
+  // Check validation
+  const validateForm = validateContent("schema_changestatusjanjitemu", { id, status })
+  if(!!validateForm) {
+    return validateForm
+  }
+  // Cek data ada atau tidak
+  const dataTemu = await queryDB('SELECT * FROM janji_temu WHERE id_janji_temu = ?', [parseInt(id)])
+  if(dataTemu.error) {
+    return {
+      error: "internalerror",
+      message: "Internal Server Error"
+    }
+  }
+  if(!dataTemu.data[0]) {
+    return {
+      error: "notfound",
+      message: "Tidak ditemukan"
+    }
+  }
+  // Memperbarui datanya
+  const dataUpdate = await queryDB('UPDATE janji_temu SET status = ? WHERE id_janji_temu = ?',[String(status).toLowerCase(), parseInt(id)])
+  if(dataUpdate.error) {
+    return {
+      error: "internalerror",
+      message: "Internal Server Error"
+    }
+  }
+  // Berhasil
+  return {
+    data: {
+      success: true
+    }
+  }
 }
 
 async function janjitemu_qrcode({ kode } = {}) {
@@ -111,7 +214,10 @@ JOIN pengguna p ON jt.id_guru = p.id_pengguna
 WHERE kode_qr = ?
 LIMIT 1`, [String(kode)])
   if(getListJanji.error) {
-    return getListJanji.error
+    return {
+      error: "internalerror",
+      message: "Internal Server Error"
+    }
   }
   if(getListJanji.noData) {
     return {
@@ -156,7 +262,10 @@ JOIN pengguna p ON jt.id_guru = p.id_pengguna
 WHERE tanggal = CURRENT_DATE
 LIMIT 50 OFFSET ?`, [showNextPage])
   if(getListJanji.error) {
-    return getListJanji.error
+    return {
+      error: "internalerror",
+      message: "Internal Server Error"
+    }
   }
   // Return listnya
   return {
@@ -184,8 +293,8 @@ LIMIT 50 OFFSET ?`, [showNextPage])
 export {
   janjitemu_daftarjanji,
   janjitemu_janjiperguru,
-
-
+  janjitemu_buatperjanjian,
+  janjitemu_statusjanjian,
   janjitemu_qrcode,
   janjitemu_hariini,
 }
