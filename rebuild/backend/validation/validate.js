@@ -76,10 +76,45 @@ const schema_changepasswordform = yup.object({
     .required("password_confrim_require|Kata sandi konfrimasi diperlukan!"),
 })
 
+const schema_addjanjitemu = yup.object({
+  id_tamu: yup.number()
+    .integer("id_tamu_need_interger|ID Tamu harus berupa angka dengan format integer")
+    .required("id_tamu_require|ID Tamu dibutuhkan!"),
+  id_guru: yup.number()
+    .integer("id_guru_need_interger|ID Guru harus berupa angka dengan format integer")
+    .required("id_guru_require|ID Guru dibutuhkan!"),
+  tanggal: yup.string()
+    .required("tanggal_require|Tanggal dibutuhkan!")
+    .matches(/^\d{4}-\d{2}-\d{2}$/, "tanggal_badmatch|Format tanggal harus YYYY-MM-DD")
+    .test('is-date-true', "tanggal_bad_inputnow|Waktu hanya dapat disini sekarang atau kedepan!", value => {
+      const dateInput = new Date(value)
+      const dateNow = new Date().getTime() - (1000*60*60*24)
+      return dateInput < dateNow
+    }),
+  waktu: yup.string()
+    .required("waktu_require|Waktu dibutuhkan!")
+    .matches(/^([01]\d|2[0-3]):[0-5]\d:[0-5]\d$/, "waktu_badmatch|Format waktu harus HH:mm:ss"),
+})
+
+const schema_changestatusjanjitemu = yup.object({
+  id: yup.number()
+    .integer("id_janjitemu_need_interger|ID janji temu harus berupa angka dengan format integer")
+    .required("id_janjitemu_require|ID janji temu dibutuhkan!"),
+  status: yup.string()
+    .required("status_change_require|Label status pembaruan diperlukan")
+    .test('match-status-label', 'status_change_bad|Tidak dapat memperbarui, hanya dapat memberikan label Telat,Selesai dan Menunggu', value => {
+      const labelAllow = ["telat","selesai","menunggu"]
+      const valueContext = String(value||"").trim().toLowerCase()
+      return labelAllow.includes(valueContext)
+    })
+})
+
 const dataschema = {
   schema_registerform,
   schema_loginform,
   schema_changepasswordform,
+  schema_addjanjitemu,
+  schema_changestatusjanjitemu,
 }
 
 const msgschema = {}

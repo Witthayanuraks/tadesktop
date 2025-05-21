@@ -25,6 +25,7 @@ async function queryDB(query, values) {
       field: dataSql[1] || []
     }
   } catch(e) {
+    console.log("Database Error:", e.stack)
     return {
       error: e.stack,
       noData: true,

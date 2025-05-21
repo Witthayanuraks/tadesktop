@@ -17,8 +17,11 @@ function middlewareRoleUsed(roleApply = ["*"]) {
     const tokendata = await autentikasi_middleware_auth(usesTokenApply)
     if(tokendata.error) {
       return res.status(500).json({
-        error: "internalerror",
-        message: "Internal Server Error"
+        error: tokendata.error,
+        message: tokendata.message,
+        action: {
+          redirect: "/login"
+        }
       })
     }
     // Apakah ada role semuanya?

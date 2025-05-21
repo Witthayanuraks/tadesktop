@@ -32,6 +32,15 @@ app.use("/api/appointments", janjiTamuRouter)    // Janji Tamu
 app.use("/api/notifications", notifikasiRouter)  // Notifikasi
 app.use("/api/reports", laporanRouter)           // Laporan Tamu
 
+// # Middleware If Error!
+app.use((err, req, res, next) => {
+  console.log(`[Error Log ${String(req.method).toUpperCase()}]: ${req.url}`, err)
+  res.status(500).json({
+    error: "internalerror",
+    message: "Internal Server Error"
+  })
+})
+
 // # Server Running
 const server = app.listen(port, host, () => {
   console.log(`
