@@ -26,7 +26,7 @@ export default function AdminDashboard() {
         {/* Header */}
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold text-gray-800">
-            Selamat datang, <span className="text-orange-600">Haries-chan(˶˃ ᵕ ˂˶) .ᐟ.ᐟ </span>[Administrator LOCK]
+            Selamat datang, <span className="text-orange-600">Admin</span>
           </h1>
           <div className="bg-white p-3 rounded-lg shadow-sm">
             <p className="text-sm text-gray-600">
@@ -100,7 +100,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Recent Activities */}
-          <div className="bg-white p-5 rounded-xl shadow-sm">
+          {/* <div className="bg-white p-5 rounded-xl shadow-sm">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">Aktivitas Terkini</h2>
             <div className="space-y-4">
               <ActivityItem 
@@ -131,8 +131,8 @@ export default function AdminDashboard() {
             </div>
             <button className="mt-4 text-sm text-orange-600 hover:text-orange-700 font-medium">
               Lihat Semua Aktivitas →
-            </button>
-          </div>
+            </button> */}
+          {/* </div> */}
         </div>
       </main>
     </div>

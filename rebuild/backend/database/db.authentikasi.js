@@ -1,7 +1,9 @@
+// db.authentikasi.js
 import { queryDB } from "../lib/database.js"
 import validateContent from "../validation/global.js"
 import { comparePassword, hashingPassword } from "../lib/pass-hash.js"
 import { JsonWebTokenSign, JsonWebTokenVerify } from "../lib/jsonwebtoken.js"
+
 
 const roleLabel = {
   penerimatamu: "Penerima Tamu",

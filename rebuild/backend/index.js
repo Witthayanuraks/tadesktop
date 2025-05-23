@@ -16,28 +16,33 @@ import "./lib/env.js"
 const port = process.env.PORT || process.env.DEV_PORT || 3001
 const host = process.argv.includes("--dev")? "127.0.0.1":"0.0.0.0"
 const app = express()
+
+
+// // # CORS Configuration - simplified
+// app.use(cors())
 app.use(cors({
   origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
-  credentials: true
+  credentials: true,
+  origin: true
 }))
-// # CORS Configuration
-const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:5173',
-  'http://127.0.0.1:5173' 
-]
+// // # CORS Configuration
+// const allowedOrigins = [
+//   'http://localhost:3000',
+//   'http://localhost:5173',
+//   'http://127.0.0.1:5173' 
+// ]
 
-// bungkusan cors
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true)
-    } else {
-      callback(new Error('Blocked by CORS: ' + origin))
-    }
-  },
-  credentials: true
-}))
+// // bungkusan cors
+// app.use(cors({
+//   origin: function (origin, callback) {
+//     if (!origin || allowedOrigins.includes(origin)) {
+//       callback(null, true)
+//     } else {
+//       callback(new Error('Blocked by CORS: ' + origin))
+//     }
+//   },
+//   credentials: true
+// }))
 
 // On Serverless / Microservices Limit In 40K(bytes)
 app.use(express.json({ limit: '20kb' }))

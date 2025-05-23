@@ -229,86 +229,205 @@
 
 
 
+// import { useNavigate } from 'react-router-dom';
+// import Sidebar from '../components/Sidebar';
+
+
+// function GuruPage() {
+
+//   const currentDate = new Date().toLocaleDateString('id-ID', {
+//     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+//   });
+
+//   return (
+//     <div className="flex min-h-screen p-8">
+//     <Sidebar />
+//     <div className="min-h-screen bg-white font-sans p-6 relative overflow-hidden">
+//       <div className="flex items-start justify-between mb-8">
+//         <div>
+//           {/* <img src="" alt="Logo" className="w-16 mb-2" /> */}
+//           <h1 className="text-2xl font-bold text-black">
+//             Selamat datang, <span className="text-orange-600">[Nama Guru]</span>!
+//           </h1>
+//           <p className="text-gray-700">{currentDate}</p>
+//         </div>
+//         {/* <img src="" alt="Maskot" className="w-28" /> */}
+//       </div>
+
+//       {/* Konten */}
+//       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+//         {/* Jadwal */}
+//         <div className="bg-gray-700 text-white p-6 rounded-lg shadow">
+//           <h2 className="font-bold text-lg mb-4">Jadwal Hari ini:</h2>
+//           <ul className="space-y-2">
+//             {/* <li className="bg-gray-500 h-4 rounded w-3/4"></li>
+//             <li className="bg-gray-500 h-4 rounded w-2/3"></li>
+//             <li className="bg-gray-500 h-4 rounded w-5/6"></li>
+//             <li className="bg-gray-500 h-4 rounded w-1/2"></li> */}
+//           </ul>
+//         </div>
+
+//         {/* Pertemuan/Janji */}
+//         <div className="bg-gray-700 text-white p-6 rounded-lg shadow">
+//           <h2 className="font-bold text-lg mb-4">Pertemuan/Janji:</h2>
+//           <ul className="space-y-2">
+//             {/* <li className="bg-gray-500 h-4 rounded w-3/4"></li>
+//             <li className="bg-gray-500 h-4 rounded w-2/3"></li>
+//             <li className="bg-gray-500 h-4 rounded w-5/6"></li>
+//             <li className="bg-gray-500 h-4 rounded w-1/2"></li> */}
+//           </ul>
+//         </div>
+//       </div>
+
+//       {/* Pengajuan */}
+//       <div className="mt-6 bg-gray-700 text-white p-6 rounded-lg shadow">
+//         <h2 className="font-bold text-lg mb-4">Pengajuan:</h2>
+//         <ul className="space-y-2">
+//           {/* <li className="bg-gray-500 h-4 rounded w-11/12"></li>
+//           <li className="bg-gray-500 h-4 rounded w-10/12"></li>
+//           <li className="bg-gray-500 h-4 rounded w-9/12"></li>
+//           <li className="bg-gray-500 h-4 rounded w-8/12"></li>
+//           <li className="bg-gray-500 h-4 rounded w-7/12"></li> */}
+//         </ul>
+//       </div>
+
+
+//     </div>
+//     </div>
+
+//   );
+// }
+
+// export default GuruPage;
 
 
 
-
-
-
-
-
-
-
-
-
-
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from '../components/Sidebar';
 
+const DashboardGuru = () => {
+  const [sidebarVisible, setSidebarVisible] = useState(false);
+  const navigate = useNavigate();
 
-function GuruPage() {
+  const toggleSidebar = () => {
+    setSidebarVisible(!sidebarVisible);
+  };
 
-  const currentDate = new Date().toLocaleDateString('id-ID', {
-    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-  });
+  const handleLogout = () => {
+    if (window.confirm("Apakah Anda yakin ingin keluar?")) {
+      navigate('/login');
+    }
+  };
+
+  const guests = [
+    {
+      id: 1,
+      name: "Windah Basudara",
+      phone: "085765325342",
+      description: "Koordinasi kerjasama",
+      status: "Sedang Menunggu",
+      date: "29/05/2025"
+    },
+    {
+      id: 2,
+      name: "Dr Tirta",
+      phone: "087678744323",
+      description: "Konsultasi",
+      status: "Sedang Menunggu",
+      date: "30/05/2025"
+    },
+    {
+      id: 3,
+      name: "Reza arab",
+      phone: "089632457676",
+      description: "Koordinasi event",
+      status: "Sedang Menunggu",
+      date: "10/06/2025"
+    }
+  ];
 
   return (
-    <div className="flex min-h-screen p-8">
-    <Sidebar />
-    <div className="min-h-screen bg-white font-sans p-6 relative overflow-hidden">
-      <div className="flex items-start justify-between mb-8">
-        <div>
-          {/* <img src="" alt="Logo" className="w-16 mb-2" /> */}
-          <h1 className="text-2xl font-bold text-black">
-            Selamat datang, <span className="text-orange-600">[Nama Guru]</span>!
-          </h1>
-          <p className="text-gray-700">{currentDate}</p>
-        </div>
-        {/* <img src="" alt="Maskot" className="w-28" /> */}
+    <div className="min-h-screen bg-cover bg-no-repeat" style={{ backgroundImage: "url(backgroundbasic.png)" }}>
+      {/* Header */}
+      <header className="bg-[#FF7E43] py-5 px-10 flex justify-between items-center">
+        <h1 className="text-lg text-white font-bold text-center ml-[550px]">Dashboard</h1>
+      </header>
+
+      {/* Sidebar Toggle Button */}
+      <div 
+        className="fixed top-1 left-[90px] z-50 cursor-pointer p-1"
+        onClick={toggleSidebar}
+      >
+        <img src="https://smkn2-singosari.sch.id/wp-content/uploads/2021/10/logo.png" alt="Logo Sekolah" className="w-15 h-15 block" />
       </div>
 
-      {/* Konten */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Jadwal */}
-        <div className="bg-gray-700 text-white p-6 rounded-lg shadow">
-          <h2 className="font-bold text-lg mb-4">Jadwal Hari ini:</h2>
-          <ul className="space-y-2">
-            {/* <li className="bg-gray-500 h-4 rounded w-3/4"></li>
-            <li className="bg-gray-500 h-4 rounded w-2/3"></li>
-            <li className="bg-gray-500 h-4 rounded w-5/6"></li>
-            <li className="bg-gray-500 h-4 rounded w-1/2"></li> */}
-          </ul>
+      {/* Sidebar */}
+      <aside 
+        className={`w-64 bg-[#183F55] text-white h-screen py-20 px-8 flex flex-col fixed left-0 top-0 transition-all duration-300 z-40 ${
+          sidebarVisible ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        <h2 className="text-3xl text-center mb-5">Guru</h2>
+        
+        <nav className="mt-5 flex-1">
+          <a href="/dashboard" className="block py-2 px-4 text-white no-underline rounded mb-2 bg-[#FF894E]">Dashboard</a>
+          <a href="/janji-temu" className="block py-2 px-4 text-white no-underline rounded mb-2 hover:bg-[#FF894E]">Janji Temu</a>
+          <a href="/notifikasi" className="block py-2 px-4 text-white no-underline rounded mb-2 hover:bg-[#FF894E]">Notifikasi</a>
+          <a href="/profile" className="block py-2 px-4 text-white no-underline rounded mb-2 hover:bg-[#FF894E]">Profile Guru</a>
+        </nav>
+
+        <button 
+          className="flex items-center bg-[#FF894E] text-black py-2 px-3 rounded-xl font-bold no-underline mt-auto mb-4"
+          onClick={handleLogout}
+        >
+          <img src="BoxArrowRight.png" alt="Keluar Icon" className="w-4 mr-1" />
+          <span>Keluar</span>
+        </button>
+      </aside>
+
+      {/* Overlay for mobile */}
+      {sidebarVisible && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+          onClick={toggleSidebar}
+        />
+      )}
+
+      {/* Main Content */}
+      <main className="p-10 text-center">
+        <div className="mx-auto border-2 border-white/75 bg-white/75 rounded-xl p-10 max-w-[1000px] shadow-md">
+          <h2 className="font-bold text-center mb-5">Daftar Tamu</h2>
+          
+          <div className="mt-0">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr>
+                  <th className="p-3 text-left bg-gray-100 font-semibold">No</th>
+                  <th className="p-3 text-left bg-gray-100 font-semibold">Nama Tamu</th>
+                  <th className="p-3 text-left bg-gray-100 font-semibold">No. Hp</th>
+                  <th className="p-3 text-left bg-gray-100 font-semibold">Keterangan</th>
+                  <th className="p-3 text-left bg-gray-100 font-semibold">Status</th>
+                  <th className="p-3 text-left bg-gray-100 font-semibold">Tanggal</th>
+                </tr>
+              </thead>
+              <tbody>
+                {guests.map((guest) => (
+                  <tr key={guest.id}>
+                    <td className="p-3 text-left bg-[#fdfafa] border-b border-gray-300">{guest.id}</td>
+                    <td className="p-3 text-left bg-[#fdfafa] border-b border-gray-300">{guest.name}</td>
+                    <td className="p-3 text-left bg-[#fdfafa] border-b border-gray-300">{guest.phone}</td>
+                    <td className="p-3 text-left bg-[#fdfafa] border-b border-gray-300">{guest.description}</td>
+                    <td className="p-3 text-left bg-[#fdfafa] border-b border-gray-300 text-red-500 font-semibold text-center">{guest.status}</td>
+                    <td className="p-3 text-left bg-[#fdfafa] border-b border-gray-300">{guest.date}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-
-        {/* Pertemuan/Janji */}
-        <div className="bg-gray-700 text-white p-6 rounded-lg shadow">
-          <h2 className="font-bold text-lg mb-4">Pertemuan/Janji:</h2>
-          <ul className="space-y-2">
-            {/* <li className="bg-gray-500 h-4 rounded w-3/4"></li>
-            <li className="bg-gray-500 h-4 rounded w-2/3"></li>
-            <li className="bg-gray-500 h-4 rounded w-5/6"></li>
-            <li className="bg-gray-500 h-4 rounded w-1/2"></li> */}
-          </ul>
-        </div>
-      </div>
-
-      {/* Pengajuan */}
-      <div className="mt-6 bg-gray-700 text-white p-6 rounded-lg shadow">
-        <h2 className="font-bold text-lg mb-4">Pengajuan:</h2>
-        <ul className="space-y-2">
-          {/* <li className="bg-gray-500 h-4 rounded w-11/12"></li>
-          <li className="bg-gray-500 h-4 rounded w-10/12"></li>
-          <li className="bg-gray-500 h-4 rounded w-9/12"></li>
-          <li className="bg-gray-500 h-4 rounded w-8/12"></li>
-          <li className="bg-gray-500 h-4 rounded w-7/12"></li> */}
-        </ul>
-      </div>
-
-
+      </main>
     </div>
-    </div>
-
   );
-}
+};
 
-export default GuruPage;
+export default DashboardGuru;

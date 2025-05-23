@@ -6,7 +6,7 @@ const poolDB = mysql.createPool({
   host: process.env.DB_HOST || "localhost", 
   user: process.env.DB_USER || "root",
   password: process.env.DB_PASSWORD || "",
-  database: process.env.DB_NAME ||"dbtamu-remake", // ganti ae dengan yang ada 
+  database: process.env.DB_NAME ||"buku_tamu", // ganti ae dengan yang ada 
   port: process.env.DB_PORT || undefined,
   // -- Other
   waitForConnections: true,

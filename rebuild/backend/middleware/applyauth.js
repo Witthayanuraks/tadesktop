@@ -1,19 +1,13 @@
 const headingFirstPrefix = "Auth" // Ubah prefixnya kalau mau
 
 function middlewareApplyAuth(req, res, next) {
+  const tokenAuth = req.headers['authorization']
+  console.log("Authorization Token:", tokenAuth)
+  req.tokenAuth = !!tokenAuth && String(!!(tokenAuth.split(' ')[0] === headingFirstPrefix)? String(tokenAuth.split(' ').slice(1).join(' ')):"")
   next()
-
-  if (tokenAuth && typeof tokenAuth === 'string') {
-    const [prefix, ...tokenParts] = tokenAuth.split(' ');
-    req.tokenAuth = prefix === headingFirstPrefix ? tokenParts.join(' ') : "";
-  } else {
-    req.tokenAuth = "";
-  }
-
-  next();
 }
 
-export default middlewareApplyAuth;
+export default middlewareApplyAuth
 
 
 // const headingFirstPrefix = "Auth" // Ubah perfixnya jika diinginkan
@@ -26,3 +20,24 @@ export default middlewareApplyAuth;
 // }
 
 // export default middlewareApplyAuth
+
+// // punya ku
+
+// // const headingFirstPrefix = "Auth" // Ubah prefixnya kalau mau
+
+// // function middlewareApplyAuth(req, res, next) {
+// //   next()
+
+// //   if (tokenAuth && typeof tokenAuth === 'string') {
+// //     const [prefix, ...tokenParts] = tokenAuth.split(' ');
+// //     req.tokenAuth = prefix === headingFirstPrefix ? tokenParts.join(' ') : "";
+// //   } else {
+// //     req.tokenAuth = "";
+// //   }
+
+// //   next();
+// // }
+
+// // export default middlewareApplyAuth;
+
+

@@ -1,0 +1,237 @@
+:root {
+  --c-theme-primary: #008ffd;
+  --c-theme-primary-accent: #ffe1cb;
+  --c-bg-primary: #d6dae0;
+  --c-bg-secondary: #eaebec;
+  --c-bg-tertiary: #fdfdfd;
+  --c-text-primary: #1f1f25;
+  --c-text-secondary: #999fa6;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+button:focus {
+  outline: 0;
+}
+button:disabled {
+    color: rgb(203, 203, 203);
+    cursor: default;
+}
+
+.datepicker {
+  width: 95%;
+  max-width: 350px;
+  background-color: var(--c-bg-tertiary);
+  border-radius: 10px;
+  box-shadow: 0px 0px 31px -8px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 0px 0px 31px -8px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 31px -8px rgba(0, 0, 0, 0.75);
+  padding: 1rem;
+  height: min-content;
+}
+
+.datepicker-top {
+  margin-bottom: 1rem;
+}
+
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  margin-top: -0.5rem;
+}
+
+.tag {
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
+  border: 0;
+  background-color: var(--c-bg-secondary);
+  border-radius: 10px;
+  padding: 0.5em 0.75em;
+  font-weight: 600;
+}
+
+.month-selector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background-color: #fff;
+  border-radius: 12px;
+  width: 2.5rem;
+  height: 2.5rem;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.25), 0 0 10px 0 rgba(0, 0, 0, 0.15);
+}
+
+.month-name {
+  font-weight: 600;
+}
+
+.datepicker-calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-row-gap: 1rem;
+}
+
+.day,
+.date {
+  justify-self: center;
+}
+
+.day {
+  color: var(--c-text-secondary);
+  font-size: 0.875em;
+  font-weight: 500;
+  justify-self: center;
+}
+
+.date {
+  border: 0;
+  padding: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  font-weight: 600;
+  border: 2px solid transparent;
+  background-color: transparent;
+  cursor: pointer;
+}
+.date:focus {
+  outline: 0;
+  color: var(--c-theme-primary);
+  border: 2px solid var(--c-theme-primary-accent);
+}
+
+.faded {
+  color: var(--c-text-secondary);
+}
+
+.current-day {
+  color: #fff;
+  border-color: var(--c-theme-primary);
+  background-color: var(--c-theme-primary);
+}
+.current-day:focus {
+  background-color: var(--c-theme-primary-accent);
+}
+
+.form-tamu {
+  background-color: #ffffff;
+  border-radius: 15px;
+  padding: 2rem;
+  width: 300px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+}
+
+.form-tamu h3 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.form-group textarea {
+  resize: none;
+  height: 60px;
+}
+
+.submit-btn {
+  display: block;
+  width: 100%;
+  padding: 0.7rem;
+  background-color: transparent;
+  color: black;
+  font-weight: bold;
+  border: 2px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+  background-color: black;
+  color: white;
+}
+
+.container-daftar-tamu {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.daftar-tamu {
+  background-color: rgb(231, 231, 231);
+  padding: 0.8rem;
+  border-radius: 15px;
+  text-align: start;
+  margin-bottom: 0.5rem;
+}
+.daftar-tamu p:nth-child(1) {
+  text-align: center;
+  color: rgb(133, 133, 133);
+}
+.bulan {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  width: 50%;
+  gap: 10px;
+}
+.bulan select,
+.bulan input {
+  padding: 0.4rem 0.7rem;
+  border-radius: 15px;
+  border: none;
+}
+
+.btns-export {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 25%;
+  margin: 1rem auto;
+}
+.btn-export {
+  padding: 0.4rem 0.7rem;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.container-form-janji {
+    display: flex;
+    min-height:70vh;
+    justify-content: space-evenly;
+    margin: 1rem 0;
+}
