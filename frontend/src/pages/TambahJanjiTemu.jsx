@@ -21,6 +21,20 @@ export default function TambahJanjiTemu() {
     keterangan: "",
   });
 
+  // Fetch appointment data when component mounts and when selectedDate changes
+  useEffect(() => {
+    const fetchDataTamu = async () => {
+      try {
+        const response = await apiAuth(getToken()).get("/janji");
+        setDataTamu(response.data.data);
+      } catch (error) {
+        console.error("Error fetching appointment data:", error);
+      }
+    };
+
+    fetchDataTamu();
+  }, [getToken, selectedDate]); // Add selectedDate as dependency to refetch when date changes
+
   // Format date to YYYY-MM-DD
   const formatToYMD = (date) => {
     const year = date.getFullYear();
@@ -108,6 +122,18 @@ export default function TambahJanjiTemu() {
       const response = await apiAuth(getToken()).post("/janji", data);
       alert(response.data.message);
       setSelectedDate(new Date());
+      setWaktu("-");
+      setData({
+        nama_tamu: "",
+        no_hp: "",
+        tanggal: "",
+        keterangan: "",
+      });
+      
+      // Refresh appointment data after successful submission
+      const newData = await apiAuth(getToken()).get("/janji");
+      setDataTamu(newData.data.data);
+      
       navigate("/dashboard-guru");
     } catch (error) {
       console.error("Error:", error.response?.data);
@@ -219,198 +245,3 @@ export default function TambahJanjiTemu() {
     </>
   );
 }
-
-
-// import { useEffect, useState } from "react";
-// import Kalender from "../../Components/Guru/Kalender";
-// import { useNavigate } from "react-router-dom";
-
-// export default function TambahJanjiTemu() {
-//   const navigate = useNavigate();
-//   const { getToken } = Auth();
-//   const [selectedDate, setSelectedDate] = useState(new Date());
-//   const [currentDate, setCurrentDate] = useState(new Date());
-//   const [waktu, setWaktu] = useState("-");
-//   const [dataTamu, setDataTamu] = useState([]);
-//   const [disabledSubmit, setDisabledSubmit] = useState(false);
-//   const [data, setData] = useState({
-//     nama_tamu: "",
-//     no_hp: "",
-//     tanggal: "",
-//     keterangan: "",
-//   });
-
-//   function formatToYMD(date) {
-//     const year = date.getFullYear();
-//     const month = `${date.getMonth() + 1}`.padStart(2, "0");
-//     const day = `${date.getDate()}`.padStart(2, "0");
-//     return `${year}-${month}-${day}`;
-//   }
-
-//   function setChange(e) {
-//     const { name, value } = e.target;
-//     if (name == "waktu") {
-//       setWaktu(value);
-//       setData({
-//         ...data,
-//         tanggal: formatToYMD(selectedDate) + " " + value,
-//       });
-//     } else {
-//       setData({
-//         ...data,
-//         [name]: value,
-//       });
-//     }
-//   }
-//   async function submit() {
-//     try {
-//       if (waktu == "-") {
-//         alert("Pilih Waktu Pertemuan");
-//         return;
-//       }
-//       setDisabledSubmit(true);
-//       const response = await apiAuth(getToken()).post("/janji", data);
-//       alert(response.data.message);
-//       setSelectedDate(new Date());
-//       navigate("/dashboard-guru");
-//     } catch (error) {
-//       console.log(error.response.data);
-//     } finally {
-//       setDisabledSubmit(false);
-//     }
-//   }
-
-//   // function checkWaktuTamu(time) {
-//   //   let status = false;
-//   //   const year = selectedDate.getFullYear();
-//   //   const month = String(selectedDate.getMonth() + 1).padStart(2, "0"); // bulan dimulai dari 0
-//   //   const day = String(selectedDate.getDate()).padStart(2, "0");
-//   //   const dataTamuFilter = dataTamu.filter((item) => {
-//   //     return item.tanggal.split(" ")[0] == `${year}-${month}-${day}`;
-//   //   });
-
-//   //   if (
-//   //     currentDate.getMonth() + 1 == selectedDate.getMonth() + 1 &&
-//   //     currentDate.getDate() == selectedDate.getDate() &&
-//   //     parseInt(time.split(":")[0]) <= currentDate.getHours()
-//   //   ) {
-//   //     status = true;
-//   //   } else {
-//   //     for (let v = 0; v < dataTamuFilter.length; v++) {
-//   //       const fil = dataTamuFilter[v].tanggal.split(" ")[1] === time;
-//   //       if (fil) {
-//   //         status = true;
-//   //         break;
-//   //       }
-//   //     }
-//   //   }
-
-//   //   return status;
-//   // }
-
-//   return (
-//     <>
-//       <NavbarGuru />
-//       <div className="container-calender">
-//         <Kalender
-//           setData={setData}
-//           setSelectedDate={setSelectedDate}
-//           selectedDate={selectedDate}
-//           dataTamu={dataTamu}
-//           waktu={waktu}
-//         />
-//         <div className="form-tamu">
-//           <h3>TAMBAH JANJI TEMU</h3>
-//           <form
-//             onSubmit={(e) => {
-//               e.preventDefault();
-//               submit();
-//             }}
-//           >
-//             <div className="form-group">
-//               <label htmlFor="nama">Nama Tamu</label>
-//               <input
-//                 type="text"
-//                 id="nama"
-//                 placeholder="Masukan Nama Tamu"
-//                 name="nama_tamu"
-//                 onChange={setChange}
-//                 required
-//               />
-//             </div>
-//             <div className="form-group">
-//               <label htmlFor="telepon">No Telepon</label>
-//               <input
-//                 type="number"
-//                 id="telepon"
-//                 placeholder="08123456789"
-//                 name="no_hp"
-//                 onChange={setChange}
-//                 required
-//               />
-//             </div>
-//             <div className="form-group">
-//               <label htmlFor="waktu">Tanggal</label>
-//               <input
-//                 type="text"
-//                 id="waktu"
-//                 name="tanggal"
-//                 placeholder="Contoh: 2025-05-10"
-//                 value={new Intl.DateTimeFormat("id-ID", {
-//                   day: "numeric",
-//                   month: "long",
-//                   year: "numeric",
-//                 }).format(selectedDate)}
-//                 readOnly
-//               />
-//             </div>
-//             <div className="form-group">
-//               <label htmlFor="time">Waktu Pertemuan</label>
-//               <select id="time" onChange={setChange} name="waktu">
-//                 <option value="-">-- Pilih Waktu Pertemuan --</option>
-//                 <option value="08:00:00" disabled={checkWaktuTamu("08:00:00")}>
-//                   08:00
-//                 </option>
-//                 <option value="09:00:00" disabled={checkWaktuTamu("09:00:00")}>
-//                   09:00
-//                 </option>
-//                 <option value="10:00:00" disabled={checkWaktuTamu("10:00:00")}>
-//                   10:00
-//                 </option>
-//                 <option value="11:00:00" disabled={checkWaktuTamu("11:00:00")}>
-//                   11:00
-//                 </option>
-//                 <option value="12:00:00" disabled={checkWaktuTamu("12:00:00")}>
-//                   12:00
-//                 </option>
-//                 <option value="13:00:00" disabled={checkWaktuTamu("13:00:00")}>
-//                   13:00
-//                 </option>
-//                 <option value="14:00:00" disabled={checkWaktuTamu("14:00:00")}>
-//                   14:00
-//                 </option>
-//               </select>
-//             </div>
-//             <div className="form-group">
-//               <label htmlFor="keterangan">Keterangan</label>
-//               <textarea
-//                 required
-//                 id="keterangan"
-//                 placeholder="Contoh: Keperluan dengan Bu Dian terkait LKS"
-//                 name="keterangan"
-//                 onChange={setChange}
-//               ></textarea>
-//             </div>
-//             <button
-//               disabled={disabledSubmit}
-//               className="submit-btn"
-//               type="submit"
-//             >
-//               Buat Janji Temu
-//             </button>
-//           </form>
-//         </div>
-//       </div>
-//     </>
-//   );
-// }

@@ -63,7 +63,7 @@ export default function AdminDashboard() {
             trend="up"
             trendValue="12%"
           />
-          {/* <StatCard 
+          <StatCard 
             title="Kunjungan Mingguan" 
             value={stats.weeklyVisits} 
             icon="📆"
@@ -71,7 +71,7 @@ export default function AdminDashboard() {
             textColor="text-purple-600"
             trend="down"
             trendValue="3%"
-          /> */}
+          />
           <StatCard 
             title="Kunjungan Bulanan" 
             value={stats.monthlyVisits} 
